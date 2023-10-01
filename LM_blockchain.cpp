@@ -63,7 +63,7 @@ void Hashing(string code, vector<char>& codeHashed){
         } else {simbolis = '0' + numeriukasRaides;}
         codeHashed[numeriukasLokacijos] = simbolis;
 
-        praeitasSimbolis = simbolioASCII; // naudojamas hashavimui.
+        praeitasSimbolis = simbolioASCII; // naudojamas hashavimui
     }
 }
 
