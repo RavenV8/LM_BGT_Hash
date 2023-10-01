@@ -24,7 +24,7 @@ void Hashing(string code, vector<char>& codeHashed){
         vector<char> codeToVector(code.begin(), code.end());
 
         simbolioASCII = (int)codeToVector[i]; // randa kiekvieno "code" simbolio ASCII.
-
+        if(simbolioASCII < 0) simbolioASCII *= -1; // paprasciausias sutvarkymas del non ASCII characters.
         // suskaiciuojama kokia reiksme bus priskirta pagal hex koduote. 
         // '*(i+1)' skirta, jog tie patys simboliai neuzimtu tu paciu vietu.
         // saknies liekana is 16, nes sudaryta is hex.
@@ -36,22 +36,34 @@ void Hashing(string code, vector<char>& codeHashed){
         simbolis = 'a' + (numeriukasRaides - 10);
         } else {simbolis = '0' + numeriukasRaides;}
 
+
+        //cout << "simbolis: " << codeToVector[i] << " ASCII " << simbolioASCII << " numeriukas raides: " << numeriukasRaides << " simbolis: "  << simbolis << endl;
+       
+       
         // panasus principas kaip simbolio rinkime.
         // tik is saknies liekanos is 16 pakeiciama i 64.
-        numeriukasLokacijos = ((simbolioASCII*(i+1)+ilgioMaisymas + praeitasSimbolis)+ simboliuSuma) % 64;
+        numeriukasLokacijos = ((simbolioASCII*(i+1)+ilgioMaisymas + praeitasSimbolis)* simboliuSuma * 5) % 64;
         codeHashed[numeriukasLokacijos] = simbolis; // priskiriamas simbolis i jam priklausancia vieta.
 
         // papildomai dar vienas hasavimas jog daugiau simboliu butu pakeista.
-        numeriukasRaides = ((ilgioMaisymas + praeitasSimbolis) + simboliuSuma) % 16;
-        numeriukasLokacijos = ((ilgioMaisymas + praeitasSimbolis)+ simboliuSuma) % 64; 
+        praeitasSimbolis = numeriukasRaides;
+        numeriukasRaides = ((ilgioMaisymas + praeitasSimbolis) * simboliuSuma) % 16;
+        numeriukasLokacijos = ((ilgioMaisymas + praeitasSimbolis) * simboliuSuma * 3) % 64; 
+        if (numeriukasRaides >= 10 && numeriukasRaides <= 15) {
+        simbolis = 'a' + (numeriukasRaides - 10);
+        } else {simbolis = '0' + numeriukasRaides;}
         codeHashed[numeriukasLokacijos] = simbolis;
 
         // papildomai dar vienas hasavimas jog daugiau simboliu butu pakeista.
-        numeriukasRaides = (i + simboliuSuma + ilgioMaisymas) % 16;
-        numeriukasLokacijos = (i + simboliuSuma + ilgioMaisymas) % 64; 
+        praeitasSimbolis = numeriukasRaides;
+        numeriukasRaides = (i * 3 + simboliuSuma + ilgioMaisymas * praeitasSimbolis) % 16;
+        numeriukasLokacijos = (i * 8 + simboliuSuma + ilgioMaisymas * praeitasSimbolis) % 64; 
+        if (numeriukasRaides >= 10 && numeriukasRaides <= 15) {
+        simbolis = 'a' + (numeriukasRaides - 10);
+        } else {simbolis = '0' + numeriukasRaides;}
         codeHashed[numeriukasLokacijos] = simbolis;
 
-        praeitasSimbolis = simbolioASCII; // naudojamas hashavimui.
+        praeitasSimbolis = simbolioASCII; // naudojamas hashavimui
     }
 }
 
@@ -109,6 +121,7 @@ void SkaitymasTestavimui (vector<string> codesHashed, vector<char> codeHashed, s
         for (int j = 0; j < 64; j++) codeHashed[j] = '0';
         Hashing(code, codeHashed);
         string codeHashedString(codeHashed.begin(), codeHashed.end());
+        //cout << i+1 << ". " << codeHashedString << endl;
         codesHashed.push_back(codeHashedString);
     }
     open_f.close();
@@ -170,6 +183,7 @@ int main(){
         cout << "Buvo " << pasikartojimai << " pasikartojimu";
     }
     else if(a==((int)'2')){
+        failoPavadinimas = "konstitucija.txt";
         SkaitymasTestavimui(codesHashed, codeHashed, code, failoPavadinimas, 2);
         SkaitymasTestavimui(codesHashed, codeHashed, code, failoPavadinimas, 4);
         SkaitymasTestavimui(codesHashed, codeHashed, code, failoPavadinimas, 8);
