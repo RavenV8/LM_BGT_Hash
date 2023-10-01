@@ -64,6 +64,7 @@ void Hashing(string code, vector<char>& codeHashed){
         codeHashed[numeriukasLokacijos] = simbolis;
 
         praeitasSimbolis = simbolioASCII; // naudojamas hashavimui
+
     }
 }
 
