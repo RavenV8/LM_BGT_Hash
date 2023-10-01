@@ -183,7 +183,7 @@ int main(){
         SkaitymasDeterministiskumas(codesHashed, codeHashed, code, failoPavadinimas, pasikartojimai);
         cout << "Buvo " << pasikartojimai << " pasikartojimu";
     }
-    else if(a==((int)'2')){
+    else if(a==((int)'2')){ 
         failoPavadinimas = "konstitucija.txt";
         SkaitymasTestavimui(codesHashed, codeHashed, code, failoPavadinimas, 2);
         SkaitymasTestavimui(codesHashed, codeHashed, code, failoPavadinimas, 4);
