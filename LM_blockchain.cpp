@@ -6,12 +6,12 @@ using namespace std;
 
 void Hashing(string code, vector<char>& codeHashed){
     char simbolis; // naudojama laikyti reiksmiai kuri bus priskirta "codeHashed".
-    int simbolioASCII, numeriukasRaides, numeriukasLokacijos;
-    int ilgioMaisymas = 1;
-    int praeitasSimbolis = 1;
-    int simboliuSuma = 0;
+    long int simbolioASCII;
+    long int numeriukasRaides, numeriukasLokacijos;
+    long int ilgioMaisymas = 1;
+    long int praeitasSimbolis = 1;
+    long int simboliuSuma = 1;
     
-    // cikle apskaiciuojami "ilgioMaisymas" ir "simboliuSuma" kintamieji, kurie bus naudojami hashavimui
     for (int i = 0; i < code.size(); i++){
         vector<char> codeToVector(code.begin(), code.end());
         simbolioASCII = (int)codeToVector[i];
@@ -35,10 +35,6 @@ void Hashing(string code, vector<char>& codeHashed){
         if (numeriukasRaides >= 10 && numeriukasRaides <= 15) {
         simbolis = 'a' + (numeriukasRaides - 10);
         } else {simbolis = '0' + numeriukasRaides;}
-
-
-        //cout << "simbolis: " << codeToVector[i] << " ASCII " << simbolioASCII << " numeriukas raides: " << numeriukasRaides << " simbolis: "  << simbolis << endl;
-       
        
         // panasus principas kaip simbolio rinkime.
         // tik is saknies liekanos is 16 pakeiciama i 64.
@@ -47,8 +43,9 @@ void Hashing(string code, vector<char>& codeHashed){
 
         // papildomai dar vienas hasavimas jog daugiau simboliu butu pakeista.
         praeitasSimbolis = numeriukasRaides;
-        numeriukasRaides = ((ilgioMaisymas + praeitasSimbolis) * simboliuSuma) % 16;
-        numeriukasLokacijos = ((ilgioMaisymas + praeitasSimbolis) * simboliuSuma * 3) % 64; 
+        numeriukasRaides = ((ilgioMaisymas + 5) * (simboliuSuma % 5) + praeitasSimbolis) % 16;
+        numeriukasLokacijos = ((ilgioMaisymas + 7) * (simboliuSuma * 3 % 3) + praeitasSimbolis) % 64; 
+
         if (numeriukasRaides >= 10 && numeriukasRaides <= 15) {
         simbolis = 'a' + (numeriukasRaides - 10);
         } else {simbolis = '0' + numeriukasRaides;}
@@ -64,21 +61,10 @@ void Hashing(string code, vector<char>& codeHashed){
         codeHashed[numeriukasLokacijos] = simbolis;
 
         praeitasSimbolis = simbolioASCII; // naudojamas hashavimui
-
     }
 }
 
 void Generavimas(){
-    // ofstream outputFile("1111symbol(1.1).txt");
-
-    // srand(static_cast<unsigned>(time(nullptr)));
-
-    // for (int i = 0; i < 100000; ++i) {
-    //     char randomChar = 'A' + rand() % 52; 
-    //     outputFile << randomChar;
-    // }
-    // outputFile.close();
-
     ofstream outputFile("100000.txt");
 
     srand(static_cast<unsigned>(time(nullptr)));
@@ -104,7 +90,6 @@ void Skaitymas (vector<string>& codesHashed, vector<char> codeHashed, string cod
       if (!open_f.eof()) { // skaito iki kol baigiasi failas
         getline(open_f, code);
         for (int i = 0; i < 64; i++) codeHashed[i] = '0';
-        // for (char symbols : hashLM) {codeHashed[symbols];}
         Hashing(code, codeHashed);
         string codeHashedString(codeHashed.begin(), codeHashed.end());
         codesHashed.push_back(codeHashedString);}
@@ -119,10 +104,9 @@ void SkaitymasTestavimui (vector<string> codesHashed, vector<char> codeHashed, s
     ifstream open_f(df);
     for (int i = 0; i < eiluciuKiekis; i++){
         getline(open_f, code);
-        for (int j = 0; j < 64; j++) codeHashed[j] = '0';
         Hashing(code, codeHashed);
         string codeHashedString(codeHashed.begin(), codeHashed.end());
-        //cout << i+1 << ". " << codeHashedString << endl;
+        for (int j = 0; j < 64; j++) codeHashed[j] = '0';
         codesHashed.push_back(codeHashedString);
     }
     open_f.close();
@@ -132,24 +116,25 @@ void SkaitymasTestavimui (vector<string> codesHashed, vector<char> codeHashed, s
     std::cout << eiluciuKiekis << " uztruko: " << fixed << setprecision(10) << diff.count() << " sek." << endl;
     }
 
-void SkaitymasDeterministiskumas (vector<string>& codesHashed, vector<char> codeHashed, string code, string df, int& pasikartojimai) {
+void SkaitymasDeterministiskumas (vector<string> codesHashed, vector<char> codeHashed, string code, string df, int& pasikartojimai) {
     bool buvoPasikartojimas;
     ifstream open_f(df);
     while (open_f){ 
       if (!open_f.eof()) { // skaito iki kol baigiasi failas
         getline(open_f, code);
         for (int i = 0; i < 64; i++) codeHashed[i] = '0';
-        // for (char symbols : hashLM) {codeHashed[symbols];}
         Hashing(code, codeHashed);
         string codeHashedString(codeHashed.begin(), codeHashed.end());
         for(int i = 0; i < codesHashed.size(); i++){
             if(codesHashed[i] == codeHashedString){
                 pasikartojimai++;
                 buvoPasikartojimas = true;
+                cout << i << ". " << code << " " << codeHashedString << endl;
             } 
         }
-        if(!pasikartojimai) codesHashed.push_back(codeHashedString);
-        else pasikartojimai = false;
+        if(!buvoPasikartojimas) codesHashed.push_back(codeHashedString);
+        buvoPasikartojimas = false;
+        if(codesHashed.size() % 1000 == 0) cout << codesHashed.size()/1000 << "%" << endl; // labai juokingas loading algoritmas ISTRINTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
       else break;
     }
@@ -179,7 +164,7 @@ int main(){
 
     if (a==((int)'3')){
         int pasikartojimai = 0;
-        failoPavadinimas = '100000.txt';
+        failoPavadinimas = "100000.txt";
         SkaitymasDeterministiskumas(codesHashed, codeHashed, code, failoPavadinimas, pasikartojimai);
         cout << "Buvo " << pasikartojimai << " pasikartojimu";
     }
@@ -222,7 +207,7 @@ int main(){
     }
     else{
         cout << "Iveskite koda: ";
-        cin >> code;
+        getline(cin, code);
         Hashing(code, codeHashed);
 
         cout << endl << endl << endl;
