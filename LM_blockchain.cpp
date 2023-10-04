@@ -65,12 +65,12 @@ void Hashing(string code, vector<char>& codeHashed){
 }
 
 void Generavimas(){
-    ofstream outputFile("100000.txt");
+    ofstream outputFile("25000_4.txt");
 
     srand(static_cast<unsigned>(time(nullptr)));
 
-    const int symbolsPerWord = 10;
-    const int numWords = 100000;
+    const int symbolsPerWord = 1000;
+    const int numWords = 25000;
 
     for (int i = 0; i < numWords; ++i) {
         for (int j = 0; j < symbolsPerWord; ++j) {
@@ -129,12 +129,12 @@ void SkaitymasDeterministiskumas (vector<string> codesHashed, vector<char> codeH
             if(codesHashed[i] == codeHashedString){
                 pasikartojimai++;
                 buvoPasikartojimas = true;
-                cout << i << ". " << code << " " << codeHashedString << endl;
+                cout << i << ". " << code << " " << codeHashedString << endl; // jei ivyktu pasikartojimas
             } 
         }
         if(!buvoPasikartojimas) codesHashed.push_back(codeHashedString);
         buvoPasikartojimas = false;
-        if(codesHashed.size() % 1000 == 0) cout << codesHashed.size()/1000 << "%" << endl; // labai juokingas loading algoritmas ISTRINTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if(codesHashed.size() % 250 == 0) cout << codesHashed.size()/250 << "%" << endl; // labai juokingas loading algoritmas ISTRINTI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
       else break;
     }
@@ -164,9 +164,42 @@ int main(){
 
     if (a==((int)'3')){
         int pasikartojimai = 0;
-        failoPavadinimas = "100000.txt";
-        SkaitymasDeterministiskumas(codesHashed, codeHashed, code, failoPavadinimas, pasikartojimai);
-        cout << "Buvo " << pasikartojimai << " pasikartojimu";
+        char c;
+        do{
+            if((c!='4' && c!='3' && c!='2' && c!='1')){ // 1 arba 0
+                cout << "kuri testa atlikti 1, 2, 3, 4. Jeigu norite savo - 0 (loading bar gali klaidingai veikti): ";
+                cin>>c;
+                pasirinkimas = false; // nustatomas default
+                cin.clear();
+                cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+            }
+            else pasirinkimas = true;
+        }while(!pasirinkimas);
+        if (c==((int)'1')){
+            failoPavadinimas = "25000_1.txt";
+            SkaitymasDeterministiskumas(codesHashed, codeHashed, code, failoPavadinimas, pasikartojimai);
+            cout << "Buvo " << pasikartojimai << " pasikartojimu";
+        }
+        else if (c==((int)'2')){
+            failoPavadinimas = "25000_2.txt";
+            SkaitymasDeterministiskumas(codesHashed, codeHashed, code, failoPavadinimas, pasikartojimai);
+            cout << "Buvo " << pasikartojimai << " pasikartojimu";
+        }
+        else if (c==((int)'3')){
+            failoPavadinimas = "25000_3.txt";
+            SkaitymasDeterministiskumas(codesHashed, codeHashed, code, failoPavadinimas, pasikartojimai);
+            cout << "Buvo " << pasikartojimai << " pasikartojimu";
+        }
+        else if (c==((int)'4')){
+            failoPavadinimas = "25000_4.txt";
+            SkaitymasDeterministiskumas(codesHashed, codeHashed, code, failoPavadinimas, pasikartojimai);
+            cout << "Buvo " << pasikartojimai << " pasikartojimu";
+        }
+        else if (c==((int)'0')){
+            cin >> failoPavadinimas;
+            SkaitymasDeterministiskumas(codesHashed, codeHashed, code, failoPavadinimas, pasikartojimai);
+            cout << "Buvo " << pasikartojimai << " pasikartojimu";
+        }
     }
     else if(a==((int)'2')){ 
         failoPavadinimas = "konstitucija.txt";
@@ -201,7 +234,6 @@ int main(){
         Skaitymas(codesHashed, codeHashed, code, failoPavadinimas);
         cout << endl << endl << endl;
         for (int i = 0; i < codesHashed.size(); i++) {
-            //std::cout << answer[i] << " index: " << i << endl;
             std::cout << i+1 << ". " << codesHashed[i] << endl;
         }
     }
