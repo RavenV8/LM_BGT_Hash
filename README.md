@@ -99,7 +99,29 @@ Hex-level Difference Statistics:
 - Maximum Difference: 100%
 - Average Difference: 86.78%
 
-#### Išvados
+#### Lyginimas su LM_blockchain su SHA-1, SHA-256, MD-5:
+Eiliškumas: LM_blockchain, SHA-1, SHA-256, MD-5
+1. 1symbol(1).txt, 
+* 0000000030000000000000000000000000000000000000e00000000000008000
+* 86f7e437faa5a7fce15d1ddcb9eaeaea377667b8
+* ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb
+* 0cc175b9c0f1b6a831c399e269772661
+2. 1symbol(2).txt,
+* 0000000000e0000000000000000b0000000000000a0000000000000000000000
+* e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98
+* 3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d
+* 92eb5ffee6ae2fec3ad71c777531578f
+#### Tuščias failas:
+1. 0symbol.txt,
+* 0000000000000000000000000000000000000000000000000000000000000000
+* da39a3ee5e6b4b0d3255bfef95601890afd80709
+* e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+* d41d8cd98f00b204e9800998ecf8427e
+
+#### Lyginimo su kitais hashavimais išvados
+* Hasahvimai sunkiau atkūrimi ir nepriklausomai nuo simbolių keičiasi visi skaičiai.
+
+#### Bendros išvados
 * Hashavimas vykstas sąlyginai greitai.
 * Atkūrimas praktiškai neįmanomas.
 * Algoritmas yra deterministinis.
