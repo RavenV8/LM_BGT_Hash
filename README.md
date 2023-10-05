@@ -83,3 +83,22 @@ Kolizijų skaicius su
 * 25,000 porų, kurių ilgis - 100 simbolių: 0
 * 25,000 porų, kurių ilgis - 500 simbolių: 0
 * 25,000 porų, kurių ilgis - 1000 simbolių: 3
+
+#### 100,000 atsitiktinių simbolių eilučių porų, skiriančių tik vienu simboliu "skirtingumas" bit'ų ir hex lygyje: 
+Bit-level Difference Statistics:
+Minimum Difference: 0
+Maximum Difference: 64
+Average Difference: 55.8571
+
+Hex-level Difference Statistics:
+Minimum Difference: 0
+Maximum Difference: 100
+Average Difference: 86.779
+
+#### Išvados
+* Hashavimas vykstas sąlyginai greitai.
+* Atkūrimas praktiškai neįmanomas.
+* Algoritmas yra deterministinis.
+* Tenkina lavinos efektą.
+* Trūkumas - Galimos kolizijos, bet praktikoje mažai pasitaikančios (su 1000 simbolių ilgio 25000 stringais galimybė - 0,03%)
+* Trūkumas - tik nuo 22 simboliu visos 64 vietos pasikeičia. Hashavime yra trys lygiai, reiktų iš viso 64, kad jau nuo vieno simbolio viskas keistųsi.
