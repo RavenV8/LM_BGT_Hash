@@ -17,6 +17,7 @@
       Priskireme "codeToVector[i]" ASCII reikšmę kintamajam "simbolioASCII".  
       Jei "simbolioASCII" mažesnis nei 0, padauginkite jį iš -1 (apsisaugome nuo non ASCII simbolių).
 
+      ----------------------------------------------------------------------------------------------------
           
       Nustatome "numeriukasRaides" kaip ((simbolioASCII * (i + 1) + ilgioMaisymas + praeitasSimbolis) + simboliuSuma) modulis 16.
   
