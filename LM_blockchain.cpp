@@ -2,27 +2,30 @@
 #include <vector>
 #include <fstream>
 #include <chrono>
+#include <random>
+
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+#include <numeric>
 using namespace std;
 
 void Hashing(string code, vector<char>& codeHashed){
-    char simbolis; // naudojama laikyti reiksmiai kuri bus priskirta "codeHashed".
+    char simbolis; // naudojama laikyti reiksmei kuri bus priskirta "codeHashed".
     long int simbolioASCII;
     long int numeriukasRaides, numeriukasLokacijos;
     long int ilgioMaisymas = 1;
     long int praeitasSimbolis = 1;
     long int simboliuSuma = 1;
-    
+    vector<char> codeToVector(code.begin(), code.end());
+
     for (int i = 0; i < code.size(); i++){
-        vector<char> codeToVector(code.begin(), code.end());
         simbolioASCII = (int)codeToVector[i];
         if(simbolioASCII > 91) ilgioMaisymas += 3;
         simboliuSuma += (int)codeToVector[i];
     }
 
     for (int i = 0; i < code.size(); i++){
-        
-        vector<char> codeToVector(code.begin(), code.end());
-
         simbolioASCII = (int)codeToVector[i]; // randa kiekvieno "code" simbolio ASCII.
         if(simbolioASCII < 0) simbolioASCII *= -1; // paprasciausias sutvarkymas del non ASCII characters.
         // suskaiciuojama kokia reiksme bus priskirta pagal hex koduote. 
@@ -141,6 +144,105 @@ void SkaitymasDeterministiskumas (vector<string> codesHashed, vector<char> codeH
     open_f.close();
 }
 
+
+string GenerateRandomString(int length) {
+    string randomString;
+    static const char charset[] =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    int charsetSize = sizeof(charset) - 1;
+
+    srand(static_cast<unsigned>(time(0)));
+    for (int i = 0; i < length; ++i) {
+        std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+        std::uniform_int_distribution<int> dist(1, 1000);
+        int randomNumber = dist(rng);
+        randomString += charset[randomNumber % charsetSize];
+    }
+
+    return randomString;
+}
+
+unsigned int calculateBitDifference(const string& str1, const string& str2) {
+    vector<char> codeHashed1(64, '0');
+    vector<char> codeHashed2(64, '0');
+
+    Hashing(str1, codeHashed1);
+    Hashing(str2, codeHashed2);
+
+    int diffCount = 0;
+    for (int i = 0; i < 64; ++i) {
+        if (codeHashed1[i] != codeHashed2[i]) {
+            diffCount++;
+        }
+    }
+    return diffCount;
+}
+
+unsigned int calculateHexDifference(const string& str1, const string& str2) {
+    vector<char> codeHashed1(64, '0');
+    vector<char> codeHashed2(64, '0');
+
+    Hashing(str1, codeHashed1);
+    Hashing(str2, codeHashed2);
+
+    // Calculate the percentage difference between the two hashes
+    int diffCount = 0;
+    for (int i = 0; i < 64; ++i) {
+        if (codeHashed1[i] != codeHashed2[i]) {
+            diffCount++;
+        }
+    }
+    return (static_cast<double>(diffCount) / 64.0) * 100.0;
+}
+
+void palyginimas(int numPairs) {
+    vector<string> stringPairs;
+    vector<unsigned int> bitDifferences;
+    vector<unsigned int> hexDifferences;
+
+    for (int i = 0; i < numPairs; i++) {
+        // Generate random string pairs and store them in stringPairs vector
+        //int number = rand() % 1000 + 1;
+        //cout << i << ". " << number << endl;
+        std::mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+        std::uniform_int_distribution<int> dist(1, 1000);
+        int randomNumber = dist(rng);
+        stringPairs.push_back(GenerateRandomString(randomNumber));
+        stringPairs.push_back(GenerateRandomString(randomNumber));
+        cout << i << ". " << randomNumber << endl;
+
+    }
+
+    for (int i = 0; i < numPairs; i++) {
+        unsigned int bitDiff = calculateBitDifference(stringPairs[2 * i], stringPairs[2 * i + 1]);
+        unsigned int hexDiff = calculateHexDifference(stringPairs[2 * i], stringPairs[2 * i + 1]);
+
+        bitDifferences.push_back(bitDiff);
+        hexDifferences.push_back(hexDiff);
+    }
+
+    // Calculate and print statistics for bit-level difference
+    unsigned int minBitDiff = *min_element(bitDifferences.begin(), bitDifferences.end());
+    unsigned int maxBitDiff = *max_element(bitDifferences.begin(), bitDifferences.end());
+    double avgBitDiff = accumulate(bitDifferences.begin(), bitDifferences.end(), 0.0) / numPairs;
+
+    cout << "Bit-level Difference Statistics:" << endl;
+    cout << "Minimum Difference: " << minBitDiff << endl;
+    cout << "Maximum Difference: " << maxBitDiff << endl;
+    cout << "Average Difference: " << avgBitDiff << endl << endl;
+
+    // Calculate and print statistics for hex-level difference
+    unsigned int minHexDiff = *min_element(hexDifferences.begin(), hexDifferences.end());
+    unsigned int maxHexDiff = *max_element(hexDifferences.begin(), hexDifferences.end());
+    double avgHexDiff = accumulate(hexDifferences.begin(), hexDifferences.end(), 0.0) / numPairs;
+
+    cout << "Hex-level Difference Statistics:" << endl;
+    cout << "Minimum Difference: " << minHexDiff << endl;
+    cout << "Maximum Difference: " << maxHexDiff << endl;
+    cout << "Average Difference: " << avgHexDiff << endl;
+}
+
+
 int main(){
     string code;
     vector<char> codeHashed;
@@ -152,8 +254,8 @@ int main(){
     bool pasirinkimas; // naudojamas su char a pasirinkimui while cikle
     do
     {
-        if((a!='3' && a!='2' && a!='1' && a!='0')){ // 1 arba 0
-            cout << "Spauskite 3 testuoti determiniskuma, 2 jeigu norite testuoti konstitucija, 1 jeigu norite, kad nuskaitytu is failo arba 0 jeigu norite vesti duomenis: ";
+        if((a!='4' && a!='3' && a!='2' && a!='1' && a!='0')){ // 1 arba 0
+            cout << "Spauskite 4 testuoti skirtinguma, 3 testuoti determiniskuma, 2 jeigu norite testuoti konstitucija, 1 jeigu norite, kad nuskaitytu is failo arba 0 jeigu norite vesti duomenis: ";
             cin>>a;
             pasirinkimas = false; // nustatomas default
             cin.clear();
@@ -162,7 +264,12 @@ int main(){
         else pasirinkimas = true;
     }while(!pasirinkimas);
 
-    if (a==((int)'3')){
+    if (a==((int)'4')){
+        cout << endl << endl << endl;
+        int numPairsToGenerate = 100000; // Kiekis analizuojamu simboliu stringu
+        palyginimas(numPairsToGenerate);
+    }
+    else if (a==((int)'3')){
         int pasikartojimai = 0;
         char c;
         do{
