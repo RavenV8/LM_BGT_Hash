@@ -54,6 +54,8 @@
           Priskirkite simboliui '0' + numeriukasRaides.
   
       Priskirkite simbolių "codeHashed" vektoriui "numeriukasLokacijos" lokacijoje.
+
+      ----------------------------------------------------------------------------------------------------
   
       Nustatykime "praeitasSimbolis" kaip "simbolioASCII". 
     }
