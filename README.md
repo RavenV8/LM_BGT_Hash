@@ -1,3 +1,6 @@
+#### Programos naudojimas:
+* Paleidimas: g++ -O2 LM_blockchain.cpp -o v01 && ./v01
+* Norint daryti testus su sukurtai failais (naudoti 2 ir 3 funkciją), reikia išsikelti txt files iš foulderio "Testai"
 
 ## Hashing pseudo kodas
 <pre>
