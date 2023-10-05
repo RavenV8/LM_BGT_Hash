@@ -78,7 +78,8 @@
 #### Tuščias failas:
 1. 0symbol.txt, Hash - 0000000000000000000000000000000000000000000000000000000000000000
 #### Efektyvumas
-<img width="571" alt="Screenshot 2023-09-28 at 23 41 35" src="https://github.com/RavenV8/LM_BGT_Hash/assets/55328476/39f2561c-d110-457e-9c11-38e4f0e41857">
+<img width="963" alt="Screenshot 2023-10-05 at 14 52 33" src="https://github.com/RavenV8/LM_BGT_Hash/assets/55328476/09c0da5d-d61b-48ff-a1e1-18b3a96ffe34">
+
 
 #### Testuojama su 100,000 atsitiktinių simbolių:
 Kolizijų skaicius su
