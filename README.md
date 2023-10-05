@@ -89,14 +89,14 @@ Kolizijų skaicius su
 
 #### 100,000 atsitiktinių simbolių eilučių porų, skiriančių tik vienu simboliu "skirtingumas" bit'ų ir hex lygyje: 
 Bit-level Difference Statistics:
-Minimum Difference: 0
-Maximum Difference: 64
-Average Difference: 55.8571
+- Minimum Difference: 0
+- Maximum Difference: 64
+- Average Difference: 55.8571
 
 Hex-level Difference Statistics:
-Minimum Difference: 0
-Maximum Difference: 100
-Average Difference: 86.779
+- Minimum Difference: 0
+- Maximum Difference: 100
+- Average Difference: 86.779
 
 #### Išvados
 * Hashavimas vykstas sąlyginai greitai.
